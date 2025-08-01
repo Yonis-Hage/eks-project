@@ -17,7 +17,9 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
+        working-directory: terraform 
         run: terraform apply -auto-approve
+
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
