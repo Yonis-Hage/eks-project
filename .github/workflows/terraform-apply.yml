@@ -1,0 +1,39 @@
+name: Terraform Apply
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --name  ${{ env.EKS_CLUSTER_NAME }} --region${{ env.AWS_REGION }}
+
+      - name: Apply issuer.yaml
+        run: kubectl apply -f cert-manager/issuer.yaml
+
+      - name: Apply app-argo.yaml
+        run: kubectl apply -f argocd/argocd-app.yaml
+
+      - name: Deploy 2048 game
+        run: kubectl apply -f argocd/apps/2048.yaml
+
