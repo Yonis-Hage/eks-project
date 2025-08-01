@@ -3,6 +3,10 @@ name: Terraform Apply
 on:
   workflow_dispatch:
 
+env:
+  EKS_CLUSTER_NAME: eks-proj     
+  AWS_REGION: eu-west-2
+
 jobs:
   apply:
     runs-on: ubuntu-latest
@@ -13,20 +17,20 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         aws-region: eu-west-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
+
       - name: Terraform Init
         run: terraform init -reconfigure
         working-directory: terraform
-      - name: Terraform Apply
-        working-directory: terraform 
-        run: terraform apply -auto-approve
 
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -auto-approve
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
@@ -35,7 +39,7 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          aws eks update-kubeconfig --name  ${{ env.EKS_CLUSTER_NAME }} --region${{ env.AWS_REGION }}
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Apply issuer.yaml
         run: kubectl apply -f cert-manager/issuer.yaml
@@ -45,4 +49,3 @@ jobs:
 
       - name: Deploy 2048 game
         run: kubectl apply -f argocd/apps/2048.yaml
-
