@@ -24,6 +24,8 @@ This project deploys the 2048 game application to an AWS EKS (Elastic Kubernetes
 
 ## Project Directory Structure
 
+```
+./
 ├── app
 │   └── 2048.app
 ├── argocd
@@ -48,5 +50,5 @@ This project deploys the 2048 game application to an AWS EKS (Elastic Kubernetes
     ├── terraform.tfstate
     ├── terraform.tfstate.backup
     └── vpc.tf
-
+```
 ## Working Images
