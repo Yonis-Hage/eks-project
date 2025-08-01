@@ -49,3 +49,4 @@ This project deploys the 2048 game application to an AWS EKS (Elastic Kubernetes
     ├── terraform.tfstate.backup
     └── vpc.tf
 
+## Working Images
