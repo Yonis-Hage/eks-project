@@ -37,15 +37,15 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Configure kubeconfig
+      - name: onfigure kubeconfig
         run: |
           aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
-      - name: Apply issuer.yaml
-        run: kubectl apply -f cert-manager/issuer.yaml
+      - name: Apply issuer.yml
+        run: kubectl apply -f cert-manager/issuer.yml
 
-      - name: Apply app-argo.yaml
-        run: kubectl apply -f argocd/argocd-app.yaml
+      - name: Apply app-argo.yml
+        run: kubectl apply -f argocd/argocd-app.yml
 
       - name: Deploy 2048 game
-        run: kubectl apply -f argocd/apps/2048.yaml
+        run: kubectl apply -f argocd/apps/2048.yml
