@@ -20,7 +20,9 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: |
+          cd terraform
+          terraform plan
 
       - name: Checkov scan (ignore failures)
         uses: bridgecrewio/checkov-action@master
